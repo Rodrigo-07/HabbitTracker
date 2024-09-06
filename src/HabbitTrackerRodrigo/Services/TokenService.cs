@@ -19,9 +19,10 @@ namespace HabbitTrackerRodrigo.Services
         {
             var claims = new List<Claim>
             {
+                // Lista de coisas/infos que o token vai ter
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Role, user.Role) // Adiciona o role ao token
+                new Claim(ClaimTypes.Role, user.Role) // Adiciona o role no token
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));

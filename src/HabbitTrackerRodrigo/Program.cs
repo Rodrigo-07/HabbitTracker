@@ -12,6 +12,20 @@ Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Liberar o CORS para o frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:5173") 
+                   .AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .AllowCredentials();
+        });
+});
+
+
 // Adiciona serviços ao contêiner.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(Environment.GetEnvironmentVariable("DefaultConnection")));
@@ -90,7 +104,10 @@ builder.Services.AddSwaggerGen(c =>
     }});
 });
 
+
 var app = builder.Build();
+
+app.UseCors("AllowFrontend");
 
 // Configura o pipeline de requisição HTTP.
 if (app.Environment.IsDevelopment())
